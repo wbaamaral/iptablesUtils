@@ -1,84 +1,77 @@
-# 利用iptables设置端口转发的shell脚本
+# Utilizando iptables para Configurar Redirecionamento de Portas
 
-## 项目作用
+## Objetivo do Projeto
 
-1. 便捷地设置iptables流量转发规则
-2. 当域名解析的地址发生变化时，自动更新流量转发规则，不需要手动变更（适用于ddns域名）
+1. Configurar regras de redirecionamento de tráfego do iptables de forma conveniente.
+2. Atualizar automaticamente as regras de redirecionamento quando o endereço de resolução de domínio muda (adequado para domínios DDNS).
 
-## 用法
-
+## Uso
 
 ```shell
-# 如果vps不能访问 raw.githubusercontent.com 推荐使用这个
+# Se o VPS não conseguir acessar raw.githubusercontent.com, use este comando
 bash <(curl -fsSL https://www.arloor.com/sh/iptablesUtils/natcfg.sh)
 ```
-或
+ou
 
-```
+```shell
 bash <(curl -fsSL https://raw.githubusercontent.com/arloor/iptablesUtils/master/natcfg.sh)
 ```
+A saída será:
 
-输出如下：
-
-```
+```shell
 #############################################################
-# Usage: setup iptables nat rules for domian/ip             #
+# Usage: setup iptables nat rules for domain/ip             #
 # Website:  http://www.arloor.com/                          #
 # Author: ARLOOR <admin@arloor.com>                         #
 # Github: https://github.com/arloor/iptablesUtils           #
 #############################################################
 
-你要做什么呢（请输入数字）？Ctrl+C 退出本脚本
-1) 增加转发规则          3) 列出所有转发规则
-2) 删除转发规则          4) 查看当前iptables配置
+O que você deseja fazer (digite um número)? Ctrl+C para sair do script
+1) Adicionar regra de redirecionamento    3) Listar todas as regras de redirecionamento
+2) Remover regra de redirecionamento      4) Ver configuração atual do iptables
 #?
 ```
+Digite um número entre 1 e 4 conforme necessário e siga as instruções.
 
-此时按照需要，输入1-4中的任意数字，然后按照提示即可
-
-## 卸载
+## Desinstalação
 
 ```shell
 wget --no-check-certificate -qO uninstall.sh https://raw.githubusercontent.com/arloor/iptablesUtils/master/dnat-uninstall.sh && bash uninstall.sh
 ```
-
-## 查看日志
+## Verificar Logs
 
 ```shell
 journalctl -exu dnat
 ```
+## Backup e Importação/Exportação de Arquivos de Configuração
 
-## 配置文件备份和导入导出
-
-配置文件在
+Os arquivos de configuração estão em:
 
 ```shell
 /etc/dnat/conf
+
 ```
 
-## trojan转发
+## Redirecionamento Trojan
 
-总是有人说，不能转发trojan，这么说的人大部分是证书配置不对。最简单的解决方案是：客户端选择不验证证书。复杂一点是自己把证书和中转机的域名搭配好。
+Algumas pessoas dizem que não podem redirecionar o Trojan, mas isso geralmente é devido à configuração incorreta de certificados. A solução mais simples é não validar o certificado no cliente. A solução mais complexa envolve configurar corretamente o certificado e o domínio do servidor de trânsito.
 
-小白记住一句话就好：客户端不验证证书。
+Para iniciantes: não valide o certificado no cliente.
 
------------------------------------------------------------------------------
+## Recomendações de Novo Projeto – Redirecionamento NAT com nftables
+O sucessor do iptables, nftables, já está disponível como ferramenta de produção nas últimas versões do Debian e CentOS. Ele resolve muitos problemas do iptables e oferece novos recursos.
 
-## 推荐新项目——使用nftables实现nat转发
+Assim, foi criado um novo projeto /arloor/nftables-nat-rust. Este projeto usa nftables para redirecionamento NAT, com as seguintes vantagens:
 
-iptables的后继者nftables已经在debain和centos最新的操作系统中作为生产工具提供，nftables提供了很多新的特性，解决了iptables很多痛点。
+Suporte a redirecionamento de intervalo de portas.
+Regras de redirecionamento em arquivos de configuração, permitindo backup e importação.
+Mais moderno.
+Portanto, é altamente recomendado usar /arloor/nftables-nat-rust. Não se preocupe, este projeto ainda pode ser usado de forma estável.
 
-因此创建了一个新的项目[/arloor/nftables-nat-rust](https://github.com/arloor/nftables-nat-rust)。该项目使用nftables作为nat转发实现，相比本项目具有如下优点：
+PS: Os dois projetos não são compatíveis. Ao mudar para o novo projeto, desinstale este projeto primeiro.
 
-1. 支持端口段转发
-2. 转发规则使用配置文件，可以进行备份以及导入
-3. 更加现代
 
-所以**强烈推荐**使用[/arloor/nftables-nat-rust](https://github.com/arloor/nftables-nat-rust)。不用担心，本项目依然可以正常稳定使用。
+## Grupo no Telegram
+https://t.me/popstary
 
-PS: 新旧两个项目并不兼容，切换到新项目时，请先卸载此项目
-
-## 电报交流群
-
-[https://t.me/popstary](https://t.me/popstary)
 
